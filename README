@@ -1,0 +1,18 @@
+This is a mirror of http://www.vim.org/scripts/script.php?script_id=4167
+
+Search area function 
+
+Language:              Python
+Maintener:              Gabriel AHTUNE <larchange@gmail.com>
+Latest Revision:      2012-08-12
+
+This script enable you to type:
+
+   >>> :AreaSearch hello math world
+
+in order to find an area of the current document (after your cursor) that
+contains the words hello math and world in any order
+
+on pressing ,,n the cursor go to the next area matching the query
+
+This script need the plugin python installed
