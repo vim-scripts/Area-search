@@ -1,7 +1,7 @@
 " Search area function 
 "
 " Language:              Python
-" Maintener:             Gabriel AHTUNE <larchange@gmai.com>
+" Maintener:             Gabriel AHTUNE <larchange@gmail.com>
 " Latest Revision:       2012-08-12
 "
 " This script enable you to type:
@@ -28,13 +28,15 @@ python << EOF
 # -*- encoding: utf-8 -*-
 import vim
 
-def chunks(buf, start):
+def chunks(buf, start, nbline=10):
     i = start
     while i < len(buf):
-        yield i, "\n".join(buf[i:min(len(buf), i + 11)])
-        i = min(len(buf), i + 10)
+        yield i, "\n".join(buf[i:min(len(buf), i + nbline + 1)])
+        i = min(len(buf), i + 1)
 
 def Search(*args):
+    cw = vim.current.window
+    cb = vim.current.buffer
     if len(args) < 1:
         try:
             keys = vim.eval("g:contextSearchArgs").split("%DELIMITER%")
@@ -45,12 +47,12 @@ def Search(*args):
         keys = args
         vim.command('let g:contextSearchArgs="%s"' % '%DELIMITER%'.join(args))
     
-    cw = vim.current.window
-    cb = vim.current.buffer
-    for linenb, chunk in chunks(cb, cw.cursor[0]):
+    for linenb, chunk in chunks(cb, cw.cursor[0] + 1):
         if all(key in chunk for key in keys):
-            print("%d, %d" % (linenb + 1, 1))
-            cw.cursor = (min(len(cb), linenb + 10), 1)
+            print("%d, %d" % (linenb + 10, 1))
+            cw.cursor = (min(len(cb), linenb + 11), 1)
+            for key in keys:
+                vim.command('let m=matchadd("Search", "%s")' % key)
             break
     else:
         print("No area match the query")
